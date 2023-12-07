@@ -1,0 +1,26 @@
+- test:
+    timeout:
+      minutes: 10
+    definitions:
+    - repository:
+        metadata:
+          format: Lava-Test Test Definition 1.0
+          name: {{ plan }}
+          description: "v4l2-tracer test plan"
+          os:
+          - debian
+          scope:
+          - functional
+        run:
+          steps:
+            - path_array=($(/usr/bin/v4l2-get-device -d {{ v4l2_driver }}))
+            - for path in "${path_array[@]}"; do
+                export V4L2_TRACER_OPTION_SET_VIDEO_DEVICE=$path
+                /usr/bin/v4l2-tracer conformance
+              done
+            - sed -i '/LD_PRELOAD=.*/d' ~/.bashrc
+            - sed -i '/V4L2_TRACER_CONFORMANCE_DATA_PATH=.*/d' ~/.bashrc
+
+      from: inline
+      name: {{ plan }}
+      path: inline/{{ plan }}.yaml

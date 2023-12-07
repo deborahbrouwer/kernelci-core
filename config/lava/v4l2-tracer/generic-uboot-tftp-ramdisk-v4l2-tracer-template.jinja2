@@ -1,0 +1,7 @@
+{% extends 'boot/generic-uboot-tftp-ramdisk-boot-template.jinja2' %}
+{% block actions %}
+{{ super () }}
+
+{% include 'v4l2-tracer/v4l2-tracer.jinja2' %}
+
+{% endblock %}
